@@ -9,9 +9,6 @@
     "VITE_FRONTEND_URL": "@vite_frontend_url"
   },
   "cleanUrls": true,
-  "domains": [
-    "webodise.vercel.app"
-  ],
   "headers": [
     {
       "source": "/index.html",
