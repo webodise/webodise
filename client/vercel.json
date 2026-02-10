@@ -5,8 +5,10 @@
   "installCommand": "npm install --legacy-peer-deps",
   "env": {
     "NODE_ENV": "production",
-    "VITE_API_URL": "@vite_api_url",
-    "VITE_FRONTEND_URL": "@vite_frontend_url"
+    "VITE_API_URL": "https://webodise.vercel.app/api",
+    "VITE_FRONTEND_URL": "https://webodise.vercel.app",
+    "VITE_GENERASE_URL": "http://generase.website",
+    "VITE_GLEEPACK_URL": "https://www.gleepack.shop"
   },
   "cleanUrls": true,
   "headers": [
