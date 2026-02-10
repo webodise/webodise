@@ -6,7 +6,7 @@
   "env": {
     "NODE_ENV": "production"
   },
-  "envPrefix": "VITE_",
+  
   "cleanUrls": true,
   "headers": [
     {
@@ -28,10 +28,17 @@
       ]
     }
   ],
-  "rewrites": [
+  "routes": [
     {
-      "source": "/(.*)",
-      "destination": "/index.html"
+      "src": "/api/(.*)",
+      "dest": "/api/$1"
+    },
+    {
+      "handle": "filesystem"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/index.html"
     }
   ]
 }
