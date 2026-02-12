@@ -1,82 +1,128 @@
 import { motion } from "framer-motion";
-import { Target, Eye, Heart, Lightbulb, Shield, Users } from "lucide-react";
-import { SectionHeading, AnimatedCard } from "@/components/shared";
+import { Section, SectionTitle, AnimatedCard } from "@/components/ui/Section";
+import { Eye, Target, UserCheck, Building2, BookOpen, Laptop, Dumbbell, FlaskConical } from "lucide-react";
 
-const values = [
-  { icon: Lightbulb, title: "Innovation", desc: "We experiment, iterate, and push boundaries." },
-  { icon: Shield, title: "Reliability", desc: "Solutions built to last, backed by support." },
-  { icon: Users, title: "Partnership", desc: "We succeed when our clients succeed." },
-  { icon: Heart, title: "Passion", desc: "Every project is crafted with care and purpose." },
+const facilities = [
+  { icon: BookOpen, title: "Library", desc: "Well-stocked library with thousands of books and digital resources." },
+  { icon: Laptop, title: "Computer Lab", desc: "Modern computer lab with internet connectivity for digital learning." },
+  { icon: FlaskConical, title: "Science Lab", desc: "Equipped science laboratories for practical learning experiences." },
+  { icon: Dumbbell, title: "Sports Ground", desc: "Spacious sports ground for cricket, football, and athletics." },
 ];
 
-export default function About() {
+const About = () => {
   return (
     <>
       {/* Hero */}
-      <section className="section-padding">
-        <div className="container-narrow">
+      <section className="gradient-hero py-24 md:py-32">
+        <div className="container mx-auto px-4">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="max-w-3xl mx-auto text-center"
+            className="text-center max-w-3xl mx-auto"
           >
-            <span className="inline-block px-3 py-1 rounded-full text-xs font-medium bg-primary/10 text-primary mb-6">
-              About Us
-            </span>
-            <h1 className="text-4xl sm:text-5xl font-display font-bold text-foreground mb-6">
-              A Lab for <span className="gradient-text">Digital Innovation</span>
-            </h1>
-            <p className="text-lg text-muted-foreground leading-relaxed">
-              Webodise Labs is a digital innovation lab focused on building smart, scalable and affordable
-              digital solutions. We help schools, startups, offices, and growing businesses transform their
-              operations with modern technology.
+            <h1 className="text-4xl md:text-5xl font-bold text-primary-foreground mb-4">About Us</h1>
+            <p className="text-primary-foreground/80 text-lg">
+              Learn about our journey, values, and commitment to shaping bright futures.
             </p>
           </motion.div>
         </div>
       </section>
 
-      {/* Mission & Vision */}
-      <section className="section-padding bg-muted/30">
-        <div className="container-narrow">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-            <AnimatedCard>
-              <Target className="w-10 h-10 text-primary mb-4" />
-              <h3 className="font-display font-bold text-xl text-foreground mb-3">Our Mission</h3>
-              <p className="text-muted-foreground leading-relaxed">
-                To empower businesses with accessible, high-quality digital tools that drive efficiency,
-                growth, and innovation — without the enterprise price tag.
-              </p>
-            </AnimatedCard>
-            <AnimatedCard delay={0.1}>
-              <Eye className="w-10 h-10 text-primary mb-4" />
-              <h3 className="font-display font-bold text-xl text-foreground mb-3">Our Vision</h3>
-              <p className="text-muted-foreground leading-relaxed">
-                To become the go-to digital partner for growing businesses worldwide — known for
-                innovation, reliability, and results that matter.
-              </p>
-            </AnimatedCard>
-          </div>
-        </div>
-      </section>
-
-      {/* Values */}
-      <section className="section-padding">
-        <div className="container-narrow">
-          <SectionHeading badge="Our Values" title="What Drives Us" />
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-4xl mx-auto">
-            {values.map((v, i) => (
-              <AnimatedCard key={v.title} delay={i * 0.1} className="text-center">
-                <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mx-auto mb-3">
-                  <v.icon className="w-6 h-6 text-primary" />
-                </div>
-                <h3 className="font-display font-semibold text-foreground mb-1">{v.title}</h3>
-                <p className="text-sm text-muted-foreground">{v.desc}</p>
-              </AnimatedCard>
+      {/* Introduction */}
+      <Section>
+        <div className="grid md:grid-cols-2 gap-12 items-center">
+          <motion.div
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+          >
+            <SectionTitle title="Our Story" center={false} />
+            <p className="text-muted-foreground leading-relaxed mb-4">
+              Jyoti Public School was established with the vision of providing accessible, quality education to the children of Saharsa and surrounding areas. Since our inception, we have been committed to creating an environment where learning is enjoyable and every student is encouraged to reach their full potential.
+            </p>
+            <p className="text-muted-foreground leading-relaxed">
+              Our school combines modern teaching methodologies with traditional values, ensuring that our students are not only academically proficient but also morally grounded individuals ready to take on the challenges of the future.
+            </p>
+          </motion.div>
+          <motion.div
+            initial={{ opacity: 0, x: 30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            className="grid grid-cols-2 gap-4"
+          >
+            {[
+              { icon: Eye, label: "Vision", color: "gradient-hero" },
+              { icon: Target, label: "Mission", color: "gradient-accent" },
+              { icon: UserCheck, label: "Values", color: "gradient-hero" },
+              { icon: Building2, label: "Campus", color: "gradient-accent" },
+            ].map((item) => (
+              <div key={item.label} className={`${item.color} rounded-2xl p-8 text-center text-primary-foreground`}>
+                <item.icon className="w-10 h-10 mx-auto mb-3" />
+                <span className="font-semibold">{item.label}</span>
+              </div>
             ))}
-          </div>
+          </motion.div>
         </div>
-      </section>
+      </Section>
+
+      {/* Mission & Vision */}
+      <Section className="gradient-subtle">
+        <div className="grid md:grid-cols-2 gap-8">
+          <AnimatedCard className="p-10">
+            <div className="w-14 h-14 rounded-2xl gradient-hero flex items-center justify-center mb-6">
+              <Eye className="w-7 h-7 text-primary-foreground" />
+            </div>
+            <h3 className="text-2xl font-bold text-foreground mb-4">Our Vision</h3>
+            <p className="text-muted-foreground leading-relaxed">
+              To be a beacon of quality education in Bihar, nurturing students who are intellectually capable, morally upright, and socially responsible. We envision a school where every child discovers their unique strengths and develops the confidence to pursue their dreams.
+            </p>
+          </AnimatedCard>
+          <AnimatedCard className="p-10" delay={0.2}>
+            <div className="w-14 h-14 rounded-2xl gradient-accent flex items-center justify-center mb-6">
+              <Target className="w-7 h-7 text-accent-foreground" />
+            </div>
+            <h3 className="text-2xl font-bold text-foreground mb-4">Our Mission</h3>
+            <p className="text-muted-foreground leading-relaxed">
+              To provide holistic education that combines academic excellence with character building. We aim to create a supportive and stimulating learning environment that fosters curiosity, creativity, and critical thinking in every student.
+            </p>
+          </AnimatedCard>
+        </div>
+      </Section>
+
+      {/* Principal's Message */}
+      <Section>
+        <SectionTitle title="Principal's Message" />
+        <AnimatedCard className="p-10 md:p-14 max-w-3xl mx-auto">
+          <div className="text-center">
+            <div className="w-24 h-24 rounded-full gradient-hero flex items-center justify-center mx-auto mb-6">
+              <UserCheck className="w-12 h-12 text-primary-foreground" />
+            </div>
+            <blockquote className="text-lg text-muted-foreground leading-relaxed italic mb-6">
+              "Education is the most powerful tool for transforming lives. At Jyoti Public School, we strive to create an environment where every student feels valued, motivated, and inspired to achieve excellence. Our dedicated faculty works tirelessly to ensure that learning goes beyond textbooks and examinations."
+            </blockquote>
+            <p className="font-semibold text-foreground">— Principal, Jyoti Public School</p>
+          </div>
+        </AnimatedCard>
+      </Section>
+
+      {/* Facilities */}
+      <Section className="gradient-subtle">
+        <SectionTitle title="Our Facilities" subtitle="Modern infrastructure for a complete learning experience" />
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {facilities.map((item, i) => (
+            <AnimatedCard key={item.title} delay={i * 0.1} className="p-8 text-center">
+              <div className="w-14 h-14 rounded-2xl gradient-hero flex items-center justify-center mx-auto mb-4">
+                <item.icon className="w-7 h-7 text-primary-foreground" />
+              </div>
+              <h3 className="font-semibold text-foreground mb-2">{item.title}</h3>
+              <p className="text-sm text-muted-foreground">{item.desc}</p>
+            </AnimatedCard>
+          ))}
+        </div>
+      </Section>
     </>
   );
-}
+};
+
+export default About;

@@ -1,147 +1,272 @@
+import { useState } from "react";
 import { motion } from "framer-motion";
-import { Mail, Phone, MapPin, MessageCircle, ArrowRight, Zap, Clock, CheckCircle } from "lucide-react";
-import { SectionHeading } from "@/components/shared";
+import { Section, SectionTitle, AnimatedCard } from "@/components/ui/Section";
+import { Phone, Mail, MapPin, Clock, Send, CheckCircle } from "lucide-react";
+
+const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:3000';
 
 const contactInfo = [
-  { icon: Mail, label: "Email", value: "webodise@gmail.com", href: "mailto:webodise@gmail.com" },
-  { icon: Phone, label: "Phone", value: "+91 9572949137", href: "tel:+919572949137" },
-  { icon: MapPin, label: "Location", value: "Saharsa, Bihar, India", href: "#" },
+  { icon: MapPin, title: "Address", text: "Kahra Ward No. 6/41, Saharsa, Bihar – 852201" },
+  { icon: Phone, title: "Phone", text: "8229095143", href: "tel:8229095143" },
+  { icon: Mail, title: "Email", text: "jyotipublicschool24@gmail.com", href: "mailto:jyotipublicschool24@gmail.com" },
+  { icon: Clock, title: "Office Hours", text: "Mon – Sat: 9:00 AM – 4:00 PM" },
 ];
 
-const features = [
-  { icon: Zap, title: "Quick Turnaround", description: "Fast project delivery without compromising quality" },
-  { icon: Clock, title: "24/7 Support", description: "Always available for your urgent needs" },
-  { icon: CheckCircle, title: "Quality Assured", description: "Premium solutions tailored to your business" },
-];
+const Contact = () => {
+  const [form, setForm] = useState({ name: "", email: "", phone: "", subject: "", message: "" });
+  const [loading, setLoading] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
-export default function Contact() {
-  const whatsappUrl = `https://wa.me/919572949137?text=${encodeURIComponent("Hi Webodise Labs! I want to discuss a project and get a quote.")}`;
-  const phoneNumber = "tel:+919572949137";
+  const validateForm = () => {
+    const newErrors: Record<string, string> = {};
+
+    // Name validation
+    if (!form.name.trim()) {
+      newErrors.name = "Name is required";
+    } else if (form.name.trim().length < 2) {
+      newErrors.name = "Name must be at least 2 characters";
+    }
+
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!form.email.trim()) {
+      newErrors.email = "Email is required";
+    } else if (!emailRegex.test(form.email)) {
+      newErrors.email = "Please enter a valid email";
+    }
+
+    // Phone validation (optional but if provided, must be valid)
+    if (form.phone.trim()) {
+      const phoneRegex = /^[0-9]{10}$/;
+      if (!phoneRegex.test(form.phone.replace(/[^0-9]/g, ""))) {
+        newErrors.phone = "Please enter a valid 10-digit phone number";
+      }
+    }
+
+    // Subject validation
+    if (!form.subject.trim()) {
+      newErrors.subject = "Subject is required";
+    } else if (form.subject.trim().length < 3) {
+      newErrors.subject = "Subject must be at least 3 characters";
+    }
+
+    // Message validation
+    if (!form.message.trim()) {
+      newErrors.message = "Message is required";
+    } else if (form.message.trim().length < 10) {
+      newErrors.message = "Message must be at least 10 characters";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!validateForm()) {
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const res = await fetch(`${API_BASE}/api/messages`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(form)
+      });
+      
+      const data = await res.json();
+      
+      if (!res.ok) {
+        throw new Error(data.error || 'Failed to send message');
+      }
+      
+      setShowSuccess(true);
+      setForm({ name: "", email: "", phone: "", subject: "", message: "" });
+      setErrors({});
+      
+      // Auto-hide success message after 5 seconds
+      setTimeout(() => setShowSuccess(false), 5000);
+    } catch (err) {
+      console.error(err);
+      setErrors({ submit: (err as Error).message || "Failed to send message. Please try again." });
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <>
-      <section className="section-padding">
-        <div className="container-narrow">
-          <SectionHeading badge="Contact Us" title="Let's Bring Your Ideas to Life" description="Get a quote for your project and let's start building amazing solutions together." />
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 max-w-5xl mx-auto">
-            {/* Get Quote Section */}
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.5 }}
-              className="space-y-8"
-            >
-              {/* Main CTA Card */}
-              <div className="glass-card p-8 rounded-2xl border border-primary/20 bg-gradient-to-br from-primary/5 to-accent/5">
-                <h3 className="text-2xl font-bold text-foreground mb-3">Get Your Free Quote</h3>
-                <p className="text-muted-foreground mb-6">
-                  Ready to start your next project? Contact us today and let our experts discuss your requirements with you.
-                </p>
-
-                <div className="space-y-3">
-                  <a
-                    href={phoneNumber}
-                    className="w-full inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg bg-primary text-primary-foreground font-medium hover:opacity-90 transition-all hover:scale-[1.02]"
-                  >
-                    <Phone className="w-4 h-4" /> Call: +91 9572949137
-                  </a>
-
-                  <a
-                    href={whatsappUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-full inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg bg-green-600 hover:bg-green-700 text-white font-medium transition-all hover:scale-[1.02]"
-                  >
-                    <MessageCircle className="w-4 h-4" /> WhatsApp Chat
-                  </a>
-
-                  <a
-                    href="mailto:webodise@gmail.com"
-                    className="w-full inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg border border-muted bg-muted/50 text-foreground font-medium hover:bg-muted transition-all hover:scale-[1.02]"
-                  >
-                    <Mail className="w-4 h-4" /> Email Us
-                  </a>
-                </div>
-              </div>
-
-              {/* Features */}
-              <div className="grid grid-cols-1 gap-4">
-                {features.map((feature, idx) => (
-                  <motion.div
-                    key={idx}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: idx * 0.1 }}
-                    className="glass-card p-4 rounded-lg flex gap-3"
-                  >
-                    <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
-                      <feature.icon className="w-5 h-5 text-primary" />
-                    </div>
-                    <div>
-                      <p className="font-semibold text-foreground text-sm">{feature.title}</p>
-                      <p className="text-xs text-muted-foreground">{feature.description}</p>
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-            </motion.div>
-
-            {/* Contact Info & Map */}
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.5 }}
-              className="space-y-6"
-            >
-              {contactInfo.map((item) => (
-                <a
-                  key={item.label}
-                  href={item.href}
-                  className="glass-card p-5 flex items-center gap-4 hover:scale-[1.02] transition-transform hover:bg-muted/50"
-                >
-                  <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
-                    <item.icon className="w-5 h-5 text-primary" />
-                  </div>
-                  <div>
-                    <p className="text-sm text-muted-foreground">{item.label}</p>
-                    <p className="font-medium text-foreground">{item.value}</p>
-                  </div>
-                </a>
-              ))}
-
-              <a
-                href={whatsappUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="glass-card p-5 flex items-center gap-4 hover:scale-[1.02] transition-transform ring-1 ring-green-500/20 hover:bg-green-50/5"
-              >
-                <div className="w-12 h-12 rounded-xl bg-green-500/10 flex items-center justify-center shrink-0">
-                  <MessageCircle className="w-5 h-5 text-green-500" />
-                </div>
-                <div>
-                  <p className="text-sm text-muted-foreground">WhatsApp</p>
-                  <p className="font-medium text-foreground">Chat with us instantly</p>
-                </div>
-              </a>
-
-              {/* Map - Saharsa Bihar */}
-              <div className="glass-card overflow-hidden rounded-xl h-48">
-                <iframe
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d57364.85493882344!2d86.5547!3d25.8783!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39edb96e1a8b1b1d%3A0x7ef6e3c7e4c7b0e!2sSaharsa%2C%20Bihar!5e0!3m2!1sen!2sin!4v1234567890"
-                  width="100%"
-                  height="100%"
-                  style={{ border: 0 }}
-                  allowFullScreen
-                  loading="lazy"
-                  referrerPolicy="no-referrer-when-downgrade"
-                  title="Webodise Labs Location - Saharsa, Bihar"
-                />
-              </div>
-            </motion.div>
-          </div>
+      <section className="gradient-hero py-24 md:py-32">
+        <div className="container mx-auto px-4">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="text-center max-w-3xl mx-auto"
+          >
+            <h1 className="text-4xl md:text-5xl font-bold text-primary-foreground mb-4">Contact Us</h1>
+            <p className="text-primary-foreground/80 text-lg">
+              We'd love to hear from you. Reach out to us anytime.
+            </p>
+          </motion.div>
         </div>
       </section>
+
+      <Section>
+        <div className="grid lg:grid-cols-3 gap-10">
+          {/* Contact Info */}
+          <div className="space-y-6">
+            <SectionTitle title="Get in Touch" center={false} />
+            {contactInfo.map((item, i) => (
+              <AnimatedCard key={item.title} delay={i * 0.1} className="p-5 flex items-start gap-4">
+                <div className="w-12 h-12 rounded-xl gradient-hero flex items-center justify-center shrink-0">
+                  <item.icon className="w-6 h-6 text-primary-foreground" />
+                </div>
+                <div>
+                  <h4 className="font-semibold text-foreground text-sm">{item.title}</h4>
+                  {item.href ? (
+                    <a href={item.href} className="text-muted-foreground text-sm hover:text-primary transition-colors">
+                      {item.text}
+                    </a>
+                  ) : (
+                    <p className="text-muted-foreground text-sm">{item.text}</p>
+                  )}
+                </div>
+              </AnimatedCard>
+            ))}
+          </div>
+
+          {/* Contact Form */}
+          <div className="lg:col-span-2">
+            <AnimatedCard className="p-8 md:p-10">
+              <h3 className="text-2xl font-bold text-foreground mb-6">Send a Message</h3>
+              
+              {showSuccess && (
+                <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-xl flex items-start gap-3">
+                  <CheckCircle className="w-6 h-6 text-green-600 shrink-0 mt-0.5" />
+                  <div>
+                    <p className="font-semibold text-green-900">Thank you for contacting us!</p>
+                    <p className="text-green-800 text-sm">Our team will get back to you soon.</p>
+                  </div>
+                </div>
+              )}
+
+              {errors.submit && (
+                <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-xl">
+                  <p className="text-red-900">{errors.submit}</p>
+                </div>
+              )}
+
+              <form onSubmit={handleSubmit} className="space-y-5">
+                <div className="grid sm:grid-cols-2 gap-5">
+                  <div>
+                    <label className="text-sm font-medium text-foreground mb-1.5 block">Full Name *</label>
+                    <input
+                      type="text"
+                      value={form.name}
+                      onChange={(e) => {
+                        setForm({ ...form, name: e.target.value });
+                        if (errors.name) setErrors({ ...errors, name: "" });
+                      }}
+                      className={`w-full px-4 py-3 rounded-xl border ${errors.name ? 'border-red-400 bg-red-50' : 'border-border'} bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring transition-shadow`}
+                      placeholder="Your name"
+                    />
+                    {errors.name && <p className="text-red-600 text-sm mt-1">{errors.name}</p>}
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium text-foreground mb-1.5 block">Email *</label>
+                    <input
+                      type="email"
+                      value={form.email}
+                      onChange={(e) => {
+                        setForm({ ...form, email: e.target.value });
+                        if (errors.email) setErrors({ ...errors, email: "" });
+                      }}
+                      className={`w-full px-4 py-3 rounded-xl border ${errors.email ? 'border-red-400 bg-red-50' : 'border-border'} bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring transition-shadow`}
+                      placeholder="your@email.com"
+                    />
+                    {errors.email && <p className="text-red-600 text-sm mt-1">{errors.email}</p>}
+                  </div>
+                </div>
+                <div className="grid sm:grid-cols-2 gap-5">
+                  <div>
+                    <label className="text-sm font-medium text-foreground mb-1.5 block">Phone</label>
+                    <input
+                      type="tel"
+                      value={form.phone}
+                      onChange={(e) => {
+                        setForm({ ...form, phone: e.target.value });
+                        if (errors.phone) setErrors({ ...errors, phone: "" });
+                      }}
+                      className={`w-full px-4 py-3 rounded-xl border ${errors.phone ? 'border-red-400 bg-red-50' : 'border-border'} bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring transition-shadow`}
+                      placeholder="Your phone number"
+                    />
+                    {errors.phone && <p className="text-red-600 text-sm mt-1">{errors.phone}</p>}
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium text-foreground mb-1.5 block">Subject *</label>
+                    <input
+                      type="text"
+                      value={form.subject}
+                      onChange={(e) => {
+                        setForm({ ...form, subject: e.target.value });
+                        if (errors.subject) setErrors({ ...errors, subject: "" });
+                      }}
+                      className={`w-full px-4 py-3 rounded-xl border ${errors.subject ? 'border-red-400 bg-red-50' : 'border-border'} bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring transition-shadow`}
+                      placeholder="Subject"
+                    />
+                    {errors.subject && <p className="text-red-600 text-sm mt-1">{errors.subject}</p>}
+                  </div>
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-foreground mb-1.5 block">Message *</label>
+                  <textarea
+                    rows={5}
+                    value={form.message}
+                    onChange={(e) => {
+                      setForm({ ...form, message: e.target.value });
+                      if (errors.message) setErrors({ ...errors, message: "" });
+                    }}
+                    className={`w-full px-4 py-3 rounded-xl border ${errors.message ? 'border-red-400 bg-red-50' : 'border-border'} bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring transition-shadow resize-none`}
+                    placeholder="Write your message here..."
+                  />
+                  {errors.message && <p className="text-red-600 text-sm mt-1">{errors.message}</p>}
+                </div>
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="inline-flex items-center gap-2 gradient-hero text-primary-foreground px-8 py-4 rounded-xl font-semibold hover:opacity-90 transition-opacity shadow-card disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  <Send className="w-5 h-5" /> {loading ? 'Sending...' : 'Send Message'}
+                </button>
+              </form>
+            </AnimatedCard>
+          </div>
+        </div>
+      </Section>
+
+      {/* Google Map */}
+      <Section className="gradient-subtle">
+        <SectionTitle title="Find Us" subtitle="Visit our campus in Saharsa, Bihar" />
+        <AnimatedCard className="overflow-hidden">
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d57468.82834994384!2d86.55!3d25.88!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39edb8a1d1c8bc7f%3A0x3c02148db84ce014!2sSaharsa%2C%20Bihar!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin"
+            width="100%"
+            height="400"
+            style={{ border: 0 }}
+            allowFullScreen
+            loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
+            title="Jyoti Public School Location"
+            className="rounded-xl"
+          />
+        </AnimatedCard>
+      </Section>
     </>
   );
-}
+};
+
+export default Contact;

@@ -87,12 +87,4 @@ function onListening() {
     ? 'pipe ' + addr
     : 'port ' + addr.port;
   debug('Listening on ' + bind);
-  console.log('');
-  console.log('====================================');
-  console.log('🚀 Webodise Server Started!');
-  console.log('====================================');
-  console.log('Server running on: http://localhost:' + addr.port);
-  console.log('Environment: ' + process.env.NODE_ENV || 'development');
-  console.log('====================================');
-  console.log('');
 }

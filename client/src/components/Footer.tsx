@@ -1,78 +1,90 @@
 import { Link } from "react-router-dom";
-import { Mail, Phone, MapPin } from "lucide-react";
+import { GraduationCap, Phone, Mail, MapPin } from "lucide-react";
 
-export default function Footer() {
+const Footer = () => {
   return (
-    <footer className="border-t border-border bg-card/50">
-      <div className="container-narrow section-padding !py-12">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-          <div className="md:col-span-1">
-            <Link to="/" className="flex items-center gap-2 mb-4">
-              <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center">
-                <span className="text-primary-foreground font-display font-bold text-base">W</span>
+    <footer className="bg-foreground text-primary-foreground">
+      <div className="container mx-auto px-4 py-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
+          {/* Brand */}
+          <div>
+            <div className="flex items-center gap-2 mb-4">
+              <div className="w-10 h-10 rounded-full gradient-accent flex items-center justify-center">
+                <GraduationCap className="w-6 h-6" />
               </div>
-              <span className="font-display font-semibold text-lg text-foreground">
-                Webodise<span className="text-primary"> Labs</span>
-              </span>
-            </Link>
-            <p className="text-sm text-muted-foreground leading-relaxed">
-              Digital Innovation Lab — building smart, scalable solutions for growing businesses.
+              <span className="font-bold text-lg">Jyoti Public School</span>
+            </div>
+            <p className="text-sm opacity-70 leading-relaxed">
+              Nurturing young minds with quality education, discipline, and values since establishment. Building the leaders of tomorrow.
             </p>
           </div>
 
+          {/* Quick Links */}
           <div>
-            <h4 className="font-display font-semibold text-foreground mb-4">Quick Links</h4>
-            <ul className="space-y-2">
-              {["Home", "Services", "Pricing", "About", "Contact"].map((item) => (
-                <li key={item}>
-                  <Link
-                    to={item === "Home" ? "/" : `/${item.toLowerCase()}`}
-                    className="text-sm text-muted-foreground hover:text-primary transition-colors"
-                  >
-                    {item}
-                  </Link>
-                </li>
-              ))}
-            </ul>
+            <h4 className="font-semibold mb-4">Quick Links</h4>
+            <div className="flex flex-col gap-2 text-sm opacity-70">
+              <Link to="/about" className="hover:opacity-100 transition-opacity">About Us</Link>
+              <Link to="/academics" className="hover:opacity-100 transition-opacity">Academics</Link>
+              <Link to="/admissions" className="hover:opacity-100 transition-opacity">Admissions</Link>
+              <Link to="/gallery" className="hover:opacity-100 transition-opacity">Gallery</Link>
+              <Link to="/contact" className="hover:opacity-100 transition-opacity">Contact Us</Link>
+            </div>
           </div>
 
+          {/* Contact */}
           <div>
-            <h4 className="font-display font-semibold text-foreground mb-4">Services</h4>
-            <ul className="space-y-2">
-              {["Website Development", "Management Systems", "Custom Software", "Hosting & Maintenance"].map((s) => (
-                <li key={s}>
-                  <Link to="/services" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                    {s}
-                  </Link>
-                </li>
-              ))}
-            </ul>
+            <h4 className="font-semibold mb-4">Contact Info</h4>
+            <div className="flex flex-col gap-3 text-sm opacity-70">
+              <div className="flex items-start gap-2">
+                <MapPin className="w-4 h-4 mt-0.5 shrink-0" />
+                <span>Kahra Ward No. 6/41, Saharsa, Bihar – 852201</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Phone className="w-4 h-4 shrink-0" />
+                <a href="tel:8229095143" className="hover:opacity-100 transition-opacity">8229095143</a>
+              </div>
+              <div className="flex items-center gap-2">
+                <Mail className="w-4 h-4 shrink-0" />
+                <a href="mailto:jyotipublicschool24@gmail.com" className="hover:opacity-100 transition-opacity">jyotipublicschool24@gmail.com</a>
+              </div>
+            </div>
           </div>
 
+          {/* Hours */}
           <div>
-            <h4 className="font-display font-semibold text-foreground mb-4">Contact</h4>
-            <ul className="space-y-3">
-              <li className="flex items-center gap-2 text-sm text-muted-foreground">
-                <Mail className="w-4 h-4 text-primary" /> webodise@gmail.com
-              </li>
-              <li className="flex items-center gap-2 text-sm text-muted-foreground">
-                <Phone className="w-4 h-4 text-primary" /> +91 9572949137
-              </li>
-              <li className="flex items-center gap-2 text-sm text-muted-foreground">
-                <MapPin className="w-4 h-4 text-primary" /> Saharsa, Bihar, India
-              </li>
-            </ul>
+            <h4 className="font-semibold mb-4">School Hours</h4>
+            <div className="text-sm opacity-70 space-y-2">
+              <p>Monday – Saturday</p>
+              <p className="font-medium opacity-100">8:00 AM – 2:00 PM</p>
+              <p className="mt-4">Office Hours</p>
+              <p className="font-medium opacity-100">9:00 AM – 4:00 PM</p>
+            </div>
           </div>
         </div>
 
-        <div className="border-t border-border mt-8 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-sm text-muted-foreground">© 2026 Webodise Labs. All rights reserved.</p>
-          <div className="flex gap-4 text-sm text-muted-foreground">
-            <Link to="/privacy-policy" className="hover:text-primary transition-colors">Privacy Policy</Link>
-            <Link to="/terms" className="hover:text-primary transition-colors">Terms & Conditions</Link>
-          </div>
+        <div className="border-t border-primary-foreground/10 mt-12 pt-8 text-center text-sm opacity-60 space-y-2">
+          <p>
+            © {new Date().getFullYear()} Jyoti Public School, Saharsa. All rights reserved.
+          </p>
+
+          <p>
+            Designed & Developed by{" "}
+            <a
+              href="http://www.webodise.website"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-medium hover:opacity-100 transition-opacity"
+            >
+              Webodise
+            </a>
+          </p>
         </div>
+
       </div>
     </footer>
   );
-}
+};
+
+export default Footer;
+
+
