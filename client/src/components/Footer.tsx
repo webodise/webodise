@@ -70,7 +70,7 @@ const Footer = () => {
           <p>
             Designed & Developed by{" "}
             <a
-              href="http://www.webodise.website"
+              href="http://www.webodise.online"
               target="_blank"
               rel="noopener noreferrer"
               className="font-medium hover:opacity-100 transition-opacity"
