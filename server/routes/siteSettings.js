@@ -15,6 +15,7 @@ function normalizeBadgeText(value) {
 router.get('/admissions-badge', async (req, res) => {
   try {
     const setting = await SiteSetting.findOne({ key: ADMISSIONS_BADGE_KEY });
+    res.set('Cache-Control', 'public, max-age=300'); // Cache for 5 minutes
     return res.json({
       text: setting && setting.value ? setting.value : DEFAULT_ADMISSIONS_BADGE_TEXT
     });

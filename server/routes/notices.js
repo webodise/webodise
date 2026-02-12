@@ -16,6 +16,7 @@ function toPublicNotice(notice) {
 router.get('/', async (req, res) => {
   try {
     const notices = await Notice.find().sort({ noticeDate: -1, createdAt: -1 });
+    res.set('Cache-Control', 'public, max-age=300'); // Cache for 5 minutes
     return res.json({ notices: notices.map(toPublicNotice) });
   } catch (error) {
     return res.status(500).json({ error: error.message });
