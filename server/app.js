@@ -11,23 +11,12 @@ var jpsAdminRouter = require('./routes/jpsadmin');
 var adminAuthRouter = require('./routes/adminAuth');
 var mongoose = require('mongoose');
 var cors = require('cors');
-var dns = require('dns');
 var momentsRouter = require('./routes/moments');
 var messagesRouter = require('./routes/messages');
 var admissionFormRouter = require('./routes/admissionForm');
 var noticesRouter = require('./routes/notices');
 var siteSettingsRouter = require('./routes/siteSettings');
 const { ensureDefaultSuperAdmin } = require('./middleware/adminAuth');
-
-// connect mongodb if URI present
-// Some environments block DNS SRV queries from Node's resolver. Set
-// public DNS servers (Google/Cloudflare) to avoid ECONNREFUSED on resolveSrv.
-try {
-  dns.setServersss(['8.8.8.8', '1.1.1.1']);
-  console.log('Node DNS servers set:', dns.getServers());
-} catch (e) {
-  console.warn('Could not set DNS servers:', e && e.message);
-}
 
 if (process.env.MONGODB_URI) {
   mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
@@ -46,6 +35,7 @@ var app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'pug');
 
 app.use(logger('dev'));
 app.use(express.json());
@@ -67,7 +57,7 @@ app.use('/api/site-settings', siteSettingsRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-  next(createError(404));
+  res.status(404).json({ error: 'Not Found' });
 });
 
 // error handler
@@ -76,9 +66,8 @@ app.use(function(err, req, res, next) {
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
-  // render the error page
-  res.status(err.status || 500);
-  res.render('error');
+  // send error response
+  res.status(err.status || 500).json({ error: err.message });
 });
 
 module.exports = app;
