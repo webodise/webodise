@@ -23,7 +23,7 @@ const { ensureDefaultSuperAdmin } = require('./middleware/adminAuth');
 // Some environments block DNS SRV queries from Node's resolver. Set
 // public DNS servers (Google/Cloudflare) to avoid ECONNREFUSED on resolveSrv.
 try {
-  dns.setServers(['8.8.8.8', '1.1.1.1']);
+  dns.setServersss(['8.8.8.8', '1.1.1.1']);
   console.log('Node DNS servers set:', dns.getServers());
 } catch (e) {
   console.warn('Could not set DNS servers:', e && e.message);
@@ -46,7 +46,6 @@ var app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
 
 app.use(logger('dev'));
 app.use(express.json());
