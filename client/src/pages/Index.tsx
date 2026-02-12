@@ -189,8 +189,8 @@ const Index = () => {
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {highlights.map((item, i) => (
             <AnimatedCard key={item.title} delay={i * 0.1} className="p-8 text-center group">
-              <div className="w-16 h-16 rounded-2xl gradient-hero flex items-center justify-center mx-auto mb-5 group-hover:scale-110 transition-transform">
-                <item.icon className="w-8 h-8 text-primary-foreground" />
+              <div className="w-16 h-16 rounded-2xl overflow-hidden mx-auto mb-5 group-hover:scale-110 transition-transform">
+                <img src="/nlogo.png" alt="Jyoti Public School Logo" className="w-full h-full object-cover" />
               </div>
               <h3 className="font-semibold text-lg text-foreground mb-2">{item.title}</h3>
               <p className="text-sm text-muted-foreground leading-relaxed">{item.desc}</p>

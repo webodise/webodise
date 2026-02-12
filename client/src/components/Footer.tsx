@@ -9,8 +9,8 @@ const Footer = () => {
           {/* Brand */}
           <div>
             <div className="flex items-center gap-2 mb-4">
-              <div className="w-10 h-10 rounded-full gradient-accent flex items-center justify-center">
-                <GraduationCap className="w-6 h-6" />
+              <div className="w-10 h-10 rounded-full overflow-hidden">
+                <img src="/nlogo.png" alt="Jyoti Public School Logo" className="w-full h-full object-cover" />
               </div>
               <span className="font-bold text-lg">Jyoti Public School</span>
             </div>

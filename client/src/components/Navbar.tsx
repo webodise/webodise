@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Menu, X, GraduationCap } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const navLinks = [
@@ -18,10 +18,10 @@ const Navbar = () => {
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-card/90 backdrop-blur-md border-b border-border">
-      <div className="container mx-auto px-4 flex items-center justify-between h-16 md:h-20">
+      <div className="container mx-auto px-4 flex items-center justify-between h-20 md:h-24">
         <Link to="/" className="flex items-center gap-2">
-          <div className="w-10 h-10 rounded-full gradient-hero flex items-center justify-center">
-            <GraduationCap className="w-6 h-6 text-primary-foreground" />
+          <div className="w-16 h-16 rounded-full overflow-hidden">
+            <img src="/nlogo.png" alt="Jyoti Public School Logo" className="w-full h-full object-cover" />
           </div>
           <div className="leading-tight">
             <span className="font-bold text-lg text-foreground">Jyoti Public School</span>
